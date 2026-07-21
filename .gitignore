@@ -1,2 +1,10 @@
 # OpenLane generated runs and artifacts
 /runs/
+
+# Xcelium generated simulation artifacts
+/.simvision/
+/waves.shm/
+/xcelium.d/
+/xrun.history
+/xrun.key
+/xrun.log
