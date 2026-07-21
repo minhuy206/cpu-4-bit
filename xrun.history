@@ -1,0 +1,1 @@
+s1(19Jul2026:17:26:41):  xrun -64bit -sv -clean -timescale 1ns/1ps -f filelist.f -top cpu_4bit_tb 
