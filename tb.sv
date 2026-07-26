@@ -31,10 +31,10 @@ module cpu_4bit_tb;
   // Zero-wait-state, asynchronous instruction-memory model.
   assign imem_rdata = program_memory[imem_addr];
 
-  // Generate a 10 ns clock period.
+  // Match the 20 ns clock period used by physical design and post-layout GLS.
   initial begin
     clk = 1'b0;
-    forever #5 clk = ~clk;
+    forever #10 clk = ~clk;
   end
 
   // Reset and check the CPU.

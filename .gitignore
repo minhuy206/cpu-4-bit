@@ -3,8 +3,14 @@
 
 # Xcelium generated simulation artifacts
 /.simvision/
-/waves.shm/
-/xcelium.d/
+/INCA_libs/
+/*.shm/
+/*xcelium*.d/
+/*.sdf.X
+/sdf_annotation.log
 /xrun.history
 /xrun.key
 /xrun.log
+
+# Local Git metadata backup; never commit repository internals
+/.gitdata/

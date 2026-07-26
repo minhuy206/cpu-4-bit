@@ -1,0 +1,361 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=2.3cm]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  columns=fullflexible,
+  showstringspaces=false,
+  keywordstyle=\color{blue!70!black},
+  commentstyle=\color{green!40!black}
+}
+
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+
+\title{Báo cáo thiết kế RTL CPU 4-bit}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Mục tiêu thiết kế}
+
+Thiết kế xây dựng một CPU đồng bộ có datapath 4-bit để minh họa đầy đủ
+chu trình thiết kế số từ RTL đến physical design. CPU thực thi instruction
+8-bit, hỗ trợ các phép toán số học, logic, dịch bit, nhảy và dừng. RTL
+được viết bằng SystemVerilog và có thể tổng hợp bằng Yosys sang standard
+cell Sky130.
+
+Các mục tiêu chính:
+
+\begin{itemize}[noitemsep]
+  \item datapath và địa chỉ rộng 4 bit;
+  \item instruction rộng 8 bit;
+  \item kiến trúc accumulator đơn giản;
+  \item bộ điều khiển FSM ba trạng thái;
+  \item reset bất đồng bộ active-low;
+  \item instruction memory nằm ngoài CPU;
+  \item RTL synthesizable, không suy diễn latch;
+  \item có self-checking testbench và chương trình kiểm thử.
+\end{itemize}
+
+\section{Cấu trúc source code}
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.34\textwidth}
+                  >{\raggedright\arraybackslash}p{0.56\textwidth}}
+\toprule
+\textbf{File} & \textbf{Chức năng} \\
+\midrule
+\endhead
+\code{cpu_4bit.sv} & Top-level CPU, các thanh ghi trạng thái và kết nối datapath. \\
+\code{control_unit.sv} & Giải mã instruction và điều khiển FSM. \\
+\code{alu_4bit.sv} & Thực hiện các phép toán số học/logic và tạo flags. \\
+\code{program_rom.sv} & Mô hình ROM 16 từ dùng cho mô phỏng độc lập. \\
+\code{tb.sv} & Self-checking RTL testbench. \\
+\code{memory/program.hex} & Chương trình kiểm thử 16 byte. \\
+\code{filelist.f} & Danh sách source dùng cho Xcelium. \\
+\bottomrule
+\end{longtable}
+
+\section{Giao diện top-level}
+
+Module \code{cpu_4bit} có giao diện:
+
+\begin{lstlisting}[language=Verilog]
+module cpu_4bit (
+    input  logic       clk,
+    input  logic       rst_n,
+    output logic [3:0] imem_addr,
+    input  logic [7:0] imem_rdata,
+    output logic       halted
+);
+\end{lstlisting}
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.20\textwidth}
+                  >{\centering\arraybackslash}p{0.12\textwidth}
+                  >{\raggedright\arraybackslash}p{0.54\textwidth}}
+\toprule
+\textbf{Signal} & \textbf{Width} & \textbf{Ý nghĩa} \\
+\midrule
+\endhead
+\code{clk} & 1 & Clock cạnh lên. Physical design và testbench cuối dùng chu kỳ 20\,ns. \\
+\code{rst_n} & 1 & Reset bất đồng bộ, tác động mức thấp. \\
+\code{imem_addr} & 4 & Địa chỉ instruction, lấy trực tiếp từ program counter. \\
+\code{imem_rdata} & 8 & Instruction đọc bất đồng bộ từ bộ nhớ ngoài. \\
+\code{halted} & 1 & Bằng 1 khi CPU đã thực thi lệnh HLT. \\
+\bottomrule
+\end{longtable}
+
+Instruction memory không nằm trong core. Cách tách này giúp CPU có giao
+diện rõ ràng, tránh tổng hợp ROM test thành standard cells và cho phép
+thay đổi chương trình mà không sửa datapath.
+
+\section{Kiến trúc datapath}
+
+\subsection{Các thanh ghi}
+
+CPU chứa các thanh ghi sau:
+
+\begin{itemize}[noitemsep]
+  \item \code{pc[3:0]}: program counter, tạo địa chỉ 0--15;
+  \item \code{ir[7:0]}: instruction register;
+  \item \code{acc[3:0]}: accumulator và toán hạng chính của ALU;
+  \item \code{zero_flag}, \code{carry_flag}, \code{borrow_flag},
+        \code{negative_flag}, \code{overflow_flag}: các cờ trạng thái.
+\end{itemize}
+
+Instruction được chia thành:
+
+\[
+\text{instruction}[7:0]
+= \underbrace{\text{opcode}[3:0]}_{\text{IR}[7:4]}
+\parallel
+\underbrace{\text{operand}[3:0]}_{\text{IR}[3:0]}.
+\]
+
+Opcode chọn phép toán, còn operand có thể là immediate data hoặc jump
+target. Đây là encoding phù hợp với CPU nhỏ vì mỗi instruction chỉ cần
+một byte.
+
+\subsection{Cập nhật tuần tự}
+
+Các thanh ghi dùng nonblocking assignment:
+
+\begin{lstlisting}[language=Verilog]
+always_ff @(posedge clk or negedge rst_n) begin
+  if (!rst_n) begin
+    pc  <= 4'b0000;
+    ir  <= 8'b0000_0000;
+    acc <= 4'b0000;
+  end else begin
+    if (ir_load)  ir  <= imem_rdata;
+    if (pc_load)  pc  <= operand;
+    else if (pc_inc) pc <= pc + 4'd1;
+    if (acc_write) acc <= alu_result;
+  end
+end
+\end{lstlisting}
+
+Toán tử \code{<=} cập nhật thanh ghi ở NBA region ngay sau cạnh clock
+hiện tại; nó không tự tạo thêm một chu kỳ. Một chu kỳ pipeline chỉ xuất
+hiện khi dữ liệu phải đi qua hai thanh ghi liên tiếp hoặc khi FSM cố ý
+chia thao tác thành nhiều trạng thái.
+
+\section{Bộ điều khiển FSM}
+
+Control unit có ba trạng thái:
+
+\begin{enumerate}[noitemsep]
+  \item \textbf{FETCH}: nạp \code{IR <- imem_rdata}, tăng
+        \code{PC <- PC + 1}, sau đó chuyển sang EXECUTE;
+  \item \textbf{EXECUTE}: giải mã opcode, phát control signals và thực thi
+        instruction, thông thường quay lại FETCH;
+  \item \textbf{HALT}: giữ \code{halted=1} và không thực thi thêm lệnh.
+\end{enumerate}
+
+Luồng trạng thái cơ bản:
+
+\[
+\text{FETCH} \rightarrow \text{EXECUTE}
+\rightarrow \text{FETCH} \rightarrow \cdots
+\rightarrow \text{HALT}.
+\]
+
+Vì mỗi instruction dùng một chu kỳ FETCH và một chu kỳ EXECUTE, throughput
+cơ bản là một instruction trong hai chu kỳ. Đây là nguyên nhân
+\code{imem_addr} giữ nguyên qua hai clock phases; không phải do
+nonblocking assignment.
+
+\section{Tập lệnh}
+
+\begin{longtable}{>{\centering\arraybackslash}p{0.11\textwidth}
+                  >{\raggedright\arraybackslash}p{0.14\textwidth}
+                  >{\raggedright\arraybackslash}p{0.58\textwidth}}
+\toprule
+\textbf{Opcode} & \textbf{Mnemonic} & \textbf{Hoạt động} \\
+\midrule
+\endhead
+\code{0x0} & NOP & Không thay đổi trạng thái datapath. \\
+\code{0x1} & LDI & \code{ACC <- operand}. \\
+\code{0x2} & ADD & \code{ACC <- ACC + operand}. \\
+\code{0x3} & SUB & \code{ACC <- ACC - operand}. \\
+\code{0x4} & AND & \code{ACC <- ACC & operand}. \\
+\code{0x5} & OR  & \code{ACC <- ACC | operand}. \\
+\code{0x6} & XOR & \code{ACC <- ACC ^ operand}. \\
+\code{0x7} & NOT & \code{ACC <- ~ACC}. \\
+\code{0x8} & SHL & Dịch trái ACC một bit. \\
+\code{0x9} & SHR & Dịch phải logic ACC một bit. \\
+\code{0xA} & JMP & \code{PC <- operand}. \\
+\code{0xB} & JZ  & Nạp PC bằng operand nếu zero flag bằng 1. \\
+\code{0xC} & INC & \code{ACC <- ACC + 1}. \\
+\code{0xD} & DEC & \code{ACC <- ACC - 1}. \\
+\code{0xF} & HLT & Chuyển FSM sang HALT. \\
+\bottomrule
+\end{longtable}
+
+Opcode \code{0xE} chưa được định nghĩa; control unit xử lý opcode không
+hợp lệ giống NOP để thiết kế luôn có hành vi xác định.
+
+\section{ALU 4-bit và flags}
+
+ALU là logic tổ hợp, nhận hai toán hạng \code{a}, \code{b} cùng
+\code{alu_op}. Mọi output được gán giá trị mặc định trước câu lệnh
+\code{case}, do đó không suy diễn latch.
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.20\textwidth}
+                  >{\raggedright\arraybackslash}p{0.66\textwidth}}
+\toprule
+\textbf{Flag} & \textbf{Ý nghĩa} \\
+\midrule
+\endhead
+\code{zero} & Result bằng 0. \\
+\code{negative} & Bằng bit MSB của result, biểu diễn dấu trong two's complement. \\
+\code{carry} & Carry-out của ADD/INC hoặc bit bị dịch ra trong SHL/SHR. \\
+\code{borrow} & Bằng 1 khi phép trừ unsigned có \code{a < b}; DEC tại 0 cũng tạo borrow. \\
+\code{overflow} & Tràn signed của ADD, SUB, INC hoặc DEC. \\
+\bottomrule
+\end{longtable}
+
+Ví dụ carry và overflow của phép cộng được tính độc lập:
+
+\begin{lstlisting}[language=Verilog]
+temp     = {1'b0, a} + {1'b0, b};
+result   = temp[3:0];
+carry    = temp[4];
+overflow = (~(a[3] ^ b[3])) & (result[3] ^ a[3]);
+\end{lstlisting}
+
+Carry mô tả tràn unsigned, trong khi overflow mô tả tràn signed.
+
+\section{Reset và coding style}
+
+Reset \code{rst_n} là asynchronous active-low:
+
+\begin{lstlisting}[language=Verilog]
+always_ff @(posedge clk or negedge rst_n)
+\end{lstlisting}
+
+Khi reset, PC, IR, ACC, flags và FSM state đều về giá trị xác định. Logic
+tuần tự dùng \code{always_ff} và nonblocking assignment; logic tổ hợp dùng
+\code{always_comb} và blocking assignment. Yosys xác nhận không suy diễn
+latch cho ALU hoặc control unit.
+
+\section{Môi trường kiểm thử RTL}
+
+Testbench tạo clock 20\,ns để khớp constraint physical design, giữ reset
+qua hai cạnh lên rồi nhả reset. Instruction memory được mô hình hóa như
+ROM bất đồng bộ zero-wait-state:
+
+\begin{lstlisting}[language=Verilog]
+assign imem_rdata = program_memory[imem_addr];
+\end{lstlisting}
+
+Chương trình kiểm thử:
+
+\begin{longtable}{>{\centering\arraybackslash}p{0.12\textwidth}
+                  >{\centering\arraybackslash}p{0.12\textwidth}
+                  >{\raggedright\arraybackslash}p{0.24\textwidth}
+                  >{\raggedright\arraybackslash}p{0.30\textwidth}}
+\toprule
+\textbf{Addr} & \textbf{Byte} & \textbf{Instruction} & \textbf{ACC sau execute} \\
+\midrule
+\endhead
+0 & \code{13} & LDI 3 & 3 \\
+1 & \code{25} & ADD 5 & 8 \\
+2 & \code{32} & SUB 2 & 6 \\
+3 & \code{80} & SHL & 12 \\
+4 & \code{90} & SHR & 6 \\
+5 & \code{F0} & HLT & 6 \\
+\bottomrule
+\end{longtable}
+
+Testbench chờ \code{halted}, đợi thêm một cạnh clock rồi kiểm tra
+\code{dut.acc == 4'd6}. Nếu CPU không halt trước 500\,ns, watchdog báo
+fatal error.
+
+\section{Chạy mô phỏng và xem waveform}
+
+Lệnh Xcelium:
+
+\begin{lstlisting}
+xrun -64bit -sv -timescale 1ns/1ps -access +rwc -xmlibdirname runs/manual_tcl_util65/xcelium_rtl_20ns.d -f filelist.f -top cpu_4bit_tb -input xcelium_rtl_shm.tcl
+\end{lstlisting}
+
+Mở waveform:
+
+\begin{lstlisting}
+simvision runs/manual_tcl_util65/rtl_wave.shm
+\end{lstlisting}
+
+Waveform đúng có chuỗi địa chỉ
+\code{0,1,2,3,4,5,6}, dữ liệu
+\code{13,25,32,80,90,F0,00} và \code{halted} lên 1 sau khi HLT được
+execute. RTL và post-layout waveform có cùng trình tự chức năng. RTL đổi
+tín hiệu qua delta-cycle gần cạnh clock; post-layout có propagation delay
+do SDF.
+
+\section{Kết quả synthesis tham chiếu}
+
+Run Yosys tại \code{runs/manual_pd_01/06-yosys-synthesis} cho kết quả:
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.50\textwidth}
+                  >{\raggedleft\arraybackslash}p{0.30\textwidth}}
+\toprule
+\textbf{Chỉ tiêu} & \textbf{Kết quả} \\
+\midrule
+\endhead
+Top module & \code{cpu_4bit} \\
+Số wire sau technology mapping & 140 \\
+Số standard-cell instance & 140 \\
+Số flip-flop \code{dfrtp_2} & 19 \\
+Mapped cell area & 1591.5264\,\(\mu\mathrm{m}^2\) \\
+\bottomrule
+\end{longtable}
+
+Mười chín flip-flop tương ứng với PC 4 bit, IR 8 bit, ACC 4 bit, năm
+flags và FSM state sau tối ưu/mapping. Synthesis tạo netlist standard-cell
+làm đầu vào cho floorplan và các bước physical design.
+
+\section{Giới hạn và hướng phát triển}
+
+\begin{itemize}
+  \item CPU chưa có data memory, stack hoặc register file.
+  \item Mỗi instruction cần hai chu kỳ; có thể cải thiện bằng pipeline
+        hoặc kiến trúc single-cycle.
+  \item Instruction memory giả định asynchronous zero-wait-state; giao
+        diện thực tế nên có handshake hoặc wait-state.
+  \item JZ chỉ dùng zero flag; có thể bổ sung branch theo carry, negative
+        và overflow.
+  \item Cần testbench bổ sung để kiểm tra từng opcode, boundary values,
+        signed overflow, carry và borrow.
+  \item Có thể bổ sung assertions và functional coverage cho FSM,
+        instruction decode và flags.
+\end{itemize}
+
+\section{Kết luận}
+
+RTL CPU 4-bit có kiến trúc accumulator nhỏ gọn nhưng chứa đủ các thành
+phần cơ bản của một bộ xử lý: PC, IR, ALU, flags, control FSM và giao tiếp
+instruction memory. Coding style phân tách rõ logic tuần tự và tổ hợp,
+không suy diễn latch và tổng hợp thành công sang Sky130. Chương trình kiểm
+thử thực hiện đúng chuỗi lệnh và kết thúc với ACC bằng 6. Đây là nền tảng
+để thực hiện synthesis, physical design, signoff và post-layout
+gate-level simulation.
+
+\end{document}

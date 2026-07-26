@@ -1,0 +1,16 @@
+\babel@toc {vietnamese}{}\relax 
+\contentsline {section}{\numberline {1}Mục tiêu thiết kế}{2}{section.1}%
+\contentsline {section}{\numberline {2}Cấu trúc source code}{2}{section.2}%
+\contentsline {section}{\numberline {3}Giao diện top-level}{2}{section.3}%
+\contentsline {section}{\numberline {4}Kiến trúc datapath}{3}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Các thanh ghi}{3}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Cập nhật tuần tự}{3}{subsection.4.2}%
+\contentsline {section}{\numberline {5}Bộ điều khiển FSM}{4}{section.5}%
+\contentsline {section}{\numberline {6}Tập lệnh}{4}{section.6}%
+\contentsline {section}{\numberline {7}ALU 4-bit và flags}{4}{section.7}%
+\contentsline {section}{\numberline {8}Reset và coding style}{5}{section.8}%
+\contentsline {section}{\numberline {9}Môi trường kiểm thử RTL}{5}{section.9}%
+\contentsline {section}{\numberline {10}Chạy mô phỏng và xem waveform}{6}{section.10}%
+\contentsline {section}{\numberline {11}Kết quả synthesis tham chiếu}{6}{section.11}%
+\contentsline {section}{\numberline {12}Giới hạn và hướng phát triển}{6}{section.12}%
+\contentsline {section}{\numberline {13}Kết luận}{7}{section.13}%
