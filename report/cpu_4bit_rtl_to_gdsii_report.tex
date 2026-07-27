@@ -614,32 +614,33 @@ Xcelium báo:
   \item mô phỏng kết thúc với ACC bằng 6 và CPU đi vào HALT.
 \end{itemize}
 
-\begin{center}
-  \includegraphics[width=0.88\textwidth,keepaspectratio]{annotated.png}
-
-  \small\textit{Kết quả SDF annotation: toàn bộ path delay và timing check
-  được annotate thành công.}
-\end{center}
-
 \begin{lstlisting}
 POST-LAYOUT SIMULATION PASSED: ACC = 6
 \end{lstlisting}
-
-\begin{center}
-  \includegraphics[width=0.62\textwidth,keepaspectratio]
-    {tb_result.png}
-
-  \small\textit{Kết quả testbench post-layout: mô phỏng hoàn tất với ACC
-  bằng 6.}
-\end{center}
 
 Kết quả post-layout phù hợp với RTL simulation. Điểm khác biệt là waveform
 post-layout có propagation delay do standard-cell timing và ký sinh
 interconnect đã được back-annotate qua SDF.
 
-\reportfigure{22.png}
-{Waveform post-layout toàn bộ quá trình mô phỏng với các chân nguồn
-VPWR/VGND và cùng chuỗi instruction như mô phỏng RTL.}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.86\textwidth,height=0.22\textheight,
+    keepaspectratio]{22a.png}
+  \caption*{(a) Kết quả SDF annotation}
+
+  \vspace{0.4em}
+
+  \includegraphics[width=0.60\textwidth,height=0.10\textheight,
+    keepaspectratio]{22b.png}
+  \caption*{(b) Kết quả testbench post-layout}
+
+  \vspace{0.4em}
+
+  \includegraphics[width=0.96\textwidth,height=0.24\textheight,
+    keepaspectratio]{22c.png}
+  \caption*{(c) Waveform post-layout}
+  \caption{Kết quả mô phỏng post-layout với SDF back-annotation.}
+\end{figure}
 
 \begin{figure}[H]
   \centering
