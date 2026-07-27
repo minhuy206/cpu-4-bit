@@ -37,7 +37,7 @@ module cpu_4bit_tb_gls_npcfix;
           dut,
           ,
           "runs/manual_tcl_util65_v2/post_layout_npcfix_sdf.log",
-          "TYPICAL"
+          "MAXIMUM"
       );
     end
   end
@@ -56,17 +56,9 @@ module cpu_4bit_tb_gls_npcfix;
     forever #10 clk = ~clk;
   end
 
-  always @(posedge clk) begin
-    $display("TIMING_TOP_CLK  t=%0.3f ns", $realtime);
-  end
-
-  always @(imem_addr) begin
-    $display("TIMING_IMEM_ADDR t=%0.3f ns value=%h", $realtime, imem_addr);
-  end
-
   initial begin
     rst_n = 1'b0;
-    repeat (2) @(posedge clk);
+    repeat (1) @(posedge clk);
     @(negedge clk);
     rst_n = 1'b1;
 

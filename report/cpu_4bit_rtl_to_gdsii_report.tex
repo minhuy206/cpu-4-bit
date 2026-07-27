@@ -618,13 +618,18 @@ Xcelium báo:
 POST-LAYOUT GLS PASSED: ACC = 6
 \end{lstlisting}
 
+\begin{center}
+  \includegraphics[width=0.62\textwidth,keepaspectratio]
+    {post_layout_tb_result.png}
+\end{center}
+
 Kết quả post-layout phù hợp với RTL simulation. Điểm khác biệt là waveform
 post-layout có propagation delay do standard-cell timing và ký sinh
 interconnect đã được back-annotate qua SDF.
 
 \reportfigure{22.png}
-{Waveform post-layout với các chân nguồn VPWR/VGND và cùng chuỗi
-instruction như mô phỏng RTL.}
+{Waveform post-layout toàn bộ quá trình mô phỏng với các chân nguồn
+VPWR/VGND và cùng chuỗi instruction như mô phỏng RTL.}
 
 \begin{figure}[H]
   \centering
