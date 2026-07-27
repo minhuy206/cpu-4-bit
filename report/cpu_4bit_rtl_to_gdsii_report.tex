@@ -1,0 +1,679 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+\usepackage{lmodern}
+\usepackage[a4paper,left=25mm,right=20mm,top=22mm,bottom=22mm]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{tikz}
+\usepackage[hidelinks]{hyperref}
+
+\usetikzlibrary{arrows.meta,positioning}
+
+\definecolor{codebg}{RGB}{245,247,249}
+\definecolor{codegreen}{RGB}{20,110,60}
+\definecolor{flowblue}{RGB}{38,94,145}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{codebg},
+  frame=single,
+  breaklines=true,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false,
+  commentstyle=\color{codegreen},
+  keywordstyle=\color{blue!70!black}
+}
+
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\um}{$\,\mu\mathrm{m}$}
+\newcommand{\umsq}{$\,\mu\mathrm{m}^{2}$}
+\graphicspath{{../Pictures/}}
+
+\newcommand{\reportfigure}[3][0.88\textwidth]{%
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=#1,height=0.72\textheight,keepaspectratio]{#2}
+    \caption{#3}
+  \end{figure}
+}
+
+\newcommand{\reportpair}[5]{%
+  \begin{figure}[H]
+    \centering
+    \begin{minipage}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=0.35\textheight,keepaspectratio]{#1}
+      \caption*{(a) #2}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=0.35\textheight,keepaspectratio]{#3}
+      \caption*{(b) #4}
+    \end{minipage}
+    \caption{#5}
+  \end{figure}
+}
+
+\title{\textbf{Thiết kế CPU 4-bit từ RTL đến GDSII}\\
+\large Seminar về quy trình thiết kế vi mạch số}
+\author{Sinh viên: \rule{6cm}{0.4pt}}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Báo cáo trình bày quá trình thiết kế một CPU 4-bit từ mô tả RTL
+SystemVerilog đến layout GDSII trên công nghệ SkyWater 130\,nm. Quy trình
+bao gồm xây dựng kiến trúc, mô phỏng RTL, tổng hợp logic, floorplan,
+placement, clock-tree synthesis, routing, trích xuất ký sinh, mô phỏng
+post-layout, xuất GDSII và signoff DRC/LVS. Kết quả cuối cho thấy thiết kế hoạt động đúng,
+đạt timing với clock 20\,ns, không có lỗi DRC, antenna hoặc LVS và tạo
+được GDSII hợp lệ.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Giới thiệu}
+
+Mục tiêu của đề tài là minh họa đầy đủ quy trình thiết kế ASIC số thông
+qua một CPU có datapath 4-bit. Thiết kế đủ nhỏ để dễ quan sát nhưng vẫn
+chứa các thành phần quan trọng như ALU, thanh ghi, program counter, bộ
+điều khiển FSM, clock, reset và giao tiếp bộ nhớ chương trình.
+
+Luồng thiết kế được thực hiện theo trình tự:
+
+\begin{center}
+\begin{tikzpicture}[
+  node distance=4mm,
+  box/.style={
+    draw=flowblue,
+    rounded corners,
+    fill=blue!5,
+    minimum height=8mm,
+    minimum width=30mm,
+    align=center,
+    font=\small
+  },
+  arrow/.style={-{Latex[length=2mm]},thick,draw=flowblue}
+]
+\node[box] (rtl) {Thiết kế RTL};
+\node[box,right=of rtl] (sim) {Mô phỏng RTL};
+\node[box,right=of sim] (syn) {Synthesis};
+\node[box,below=of syn] (fp) {Floorplan};
+\node[box,left=of fp] (place) {Placement};
+\node[box,left=of place] (cts) {CTS};
+\node[box,below=of cts] (route) {Routing};
+\node[box,right=of route] (rcx) {Parasitic\\extraction};
+\node[box,right=of rcx] (gls) {Post-layout\\STA/GLS};
+\node[box,below=of gls] (gds) {GDSII};
+\node[box,left=of gds] (signoff) {DRC/LVS\\signoff};
+
+\draw[arrow] (rtl) -- (sim);
+\draw[arrow] (sim) -- (syn);
+\draw[arrow] (syn) -- (fp);
+\draw[arrow] (fp) -- (place);
+\draw[arrow] (place) -- (cts);
+\draw[arrow] (cts) -- (route);
+\draw[arrow] (route) -- (rcx);
+\draw[arrow] (rcx) -- (gls);
+\draw[arrow] (gls) -- (gds);
+\draw[arrow] (gds) -- (signoff);
+\end{tikzpicture}
+\end{center}
+
+\section{Công nghệ và công cụ}
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.27\textwidth}
+                  >{\raggedright\arraybackslash}p{0.63\textwidth}}
+\toprule
+\textbf{Thành phần} & \textbf{Vai trò} \\
+\midrule
+\endhead
+SystemVerilog & Mô tả RTL của CPU, ALU, control unit và testbench. \\
+Xcelium & Mô phỏng RTL và gate-level simulation có SDF. \\
+Yosys & Tổng hợp RTL và ánh xạ sang standard cell. \\
+OpenROAD & Floorplan, placement, CTS, routing, STA và trích xuất ký sinh. \\
+OpenLane 2 & Cung cấp môi trường, PDK và các bước kiểm tra signoff. \\
+Sky130A & PDK SkyWater 130\,nm sử dụng trong thiết kế. \\
+\code{sky130_fd_sc_hd} & Thư viện standard cell high-density. \\
+Magic, KLayout và Netgen & DRC, stream-out, extraction và LVS. \\
+\bottomrule
+\end{longtable}
+
+Clock mục tiêu có chu kỳ 20\,ns, tương đương 50\,MHz. Floorplan sử dụng
+core utilization mục tiêu 65\%.
+
+\section{Thiết kế RTL}
+
+\subsection{Kiến trúc CPU}
+
+CPU sử dụng datapath 4-bit và instruction 8-bit. Mỗi instruction gồm
+opcode 4-bit và operand 4-bit. Operand được sử dụng làm dữ liệu immediate
+hoặc địa chỉ nhảy.
+
+Ba khối RTL chính gồm:
+
+\begin{itemize}[noitemsep]
+  \item \code{cpu_4bit}: top-level chứa program counter, instruction
+        register, accumulator và các cờ trạng thái;
+  \item \code{control_unit}: giải mã instruction và điều khiển FSM gồm
+        FETCH, EXECUTE và HALT;
+  \item \code{alu_4bit}: thực hiện các phép số học, logic và dịch bit.
+\end{itemize}
+
+Instruction memory được đặt bên ngoài core. CPU chỉ xuất địa chỉ
+\code{imem_addr[3:0]} và nhận instruction qua
+\code{imem_rdata[7:0]}. Cách tổ chức này giúp physical design chỉ chứa
+logic CPU và không tổng hợp ROM mô phỏng thành standard cell.
+
+\subsection{Tập lệnh}
+
+\begin{longtable}{>{\centering\arraybackslash}p{0.12\textwidth}
+                  >{\raggedright\arraybackslash}p{0.15\textwidth}
+                  >{\raggedright\arraybackslash}p{0.56\textwidth}}
+\toprule
+\textbf{Opcode} & \textbf{Lệnh} & \textbf{Chức năng} \\
+\midrule
+\endhead
+\code{0x0} & NOP & Không thay đổi trạng thái CPU. \\
+\code{0x1} & LDI & Nạp operand vào ACC. \\
+\code{0x2} & ADD & Cộng operand với ACC. \\
+\code{0x3} & SUB & Trừ operand khỏi ACC. \\
+\code{0x4} & AND & AND giữa ACC và operand. \\
+\code{0x5} & OR  & OR giữa ACC và operand. \\
+\code{0x6} & XOR & XOR giữa ACC và operand. \\
+\code{0x7} & NOT & Đảo các bit của ACC. \\
+\code{0x8} & SHL & Dịch trái ACC một bit. \\
+\code{0x9} & SHR & Dịch phải logic ACC một bit. \\
+\code{0xA} & JMP & Nhảy không điều kiện đến operand. \\
+\code{0xB} & JZ  & Nhảy đến operand nếu cờ zero bằng 1. \\
+\code{0xC} & INC & Tăng ACC lên 1. \\
+\code{0xD} & DEC & Giảm ACC đi 1. \\
+\code{0xF} & HLT & Dừng CPU. \\
+\bottomrule
+\end{longtable}
+
+\subsection{ALU 4-bit}
+
+ALU hỗ trợ bốn nhóm thao tác:
+
+\begin{itemize}[noitemsep]
+  \item số học: cộng, trừ, tăng và giảm;
+  \item logic: AND, OR, XOR và NOT;
+  \item dịch bit: dịch trái và dịch phải logic;
+  \item truyền operand trực tiếp để thực hiện LDI.
+\end{itemize}
+
+Các cờ zero, carry, borrow, negative và overflow được cập nhật sau những
+lệnh ghi kết quả vào ACC.
+
+\section{Mô phỏng và kiểm chứng RTL}
+
+Testbench tạo clock 20\,ns và mô hình instruction memory bất đồng bộ,
+zero-wait-state. Chương trình kiểm thử gồm:
+
+\begin{center}
+\code{LDI 3} $\rightarrow$
+\code{ADD 5} $\rightarrow$
+\code{SUB 2} $\rightarrow$
+\code{SHL} $\rightarrow$
+\code{SHR} $\rightarrow$
+\code{HLT}.
+\end{center}
+
+Giá trị ACC thay đổi lần lượt thành 3, 8, 6, 12 và 6. Sau lệnh HLT,
+\code{halted} lên mức 1. Testbench tự kiểm tra và trả về:
+
+\begin{lstlisting}
+TEST PASSED: ACC = 6
+\end{lstlisting}
+
+Kết quả này xác nhận chức năng cơ bản của RTL trước khi chuyển sang
+synthesis và physical design.
+
+\reportfigure{full_rtl_waveform.png}
+{Mô phỏng RTL đầy đủ đến 250\,ns: địa chỉ tăng từ 0 đến 6, instruction lần lượt là
+\code{13}, \code{25}, \code{32}, \code{80}, \code{90}, \code{F0} và
+\code{00}; tín hiệu \code{halted} lên mức 1 sau lệnh HLT.}
+
+\section{Tổng hợp logic}
+
+Yosys đọc ba file RTL tổng hợp được, tối ưu logic và ánh xạ thiết kế sang
+thư viện \code{sky130_fd_sc_hd}. Testbench và program ROM không được đưa
+vào synthesis.
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.48\textwidth}
+                  >{\raggedleft\arraybackslash}p{0.32\textwidth}}
+\toprule
+\textbf{Chỉ tiêu} & \textbf{Kết quả} \\
+\midrule
+\endhead
+Top module & \code{cpu_4bit} \\
+Số wire sau technology mapping & 140 \\
+Số standard-cell instance & 140 \\
+Số flip-flop \code{dfrtp_2} sau tối ưu & 19 \\
+Mapped cell area & 1591.5264\umsq \\
+\bottomrule
+\end{longtable}
+
+\reportfigure[0.72\textwidth]{synthesis_output.png}
+{Kết quả tổng hợp của Yosys sau technology mapping: thiết kế gồm 140
+standard cell với tổng diện tích 1591.5264\umsq.}
+
+Netlist sau tổng hợp là đầu vào của OpenROAD. Con số flip-flop trong bảng
+là kết quả sau tối ưu và technology mapping, không phải tổng số bit trạng
+thái được đếm trực tiếp từ RTL.
+
+\begin{lstlisting}[language=tcl]
+read_verilog cpu_4bit.nl.v
+link_design cpu_4bit
+create_clock -name clk -period 20.0 [get_ports clk]
+\end{lstlisting}
+
+\reportpair{report_clock_property_before_floorplan.png}
+{Clock 20\,ns sau khi nạp netlist}
+{report_area_after_initialize_floorplanning.png}
+{Báo cáo diện tích ban đầu}
+{Các báo cáo kiểm tra khi nạp thiết kế và khởi tạo physical design.}
+
+\section{Floorplan và power planning}
+
+\subsection{Cấu hình chính}
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.35\textwidth}
+                  >{\raggedright\arraybackslash}p{0.50\textwidth}}
+\toprule
+\textbf{Tham số} & \textbf{Giá trị} \\
+\midrule
+\endhead
+PDK & \code{sky130A} \\
+Standard-cell library & \code{sky130_fd_sc_hd} \\
+Clock port & \code{clk} \\
+Clock period & 20\,ns \\
+Target core utilization & 65\% \\
+Aspect ratio & 1.0 \\
+\bottomrule
+\end{longtable}
+
+Target utilization 65\% tạo sự cân bằng giữa diện tích core và khoảng
+trống cần thiết cho placement, clock buffer, timing repair và routing.
+Đây là giá trị dùng để tính kích thước floorplan ban đầu; utilization
+cuối có thể thay đổi sau khi flow chèn thêm cell.
+
+\begin{lstlisting}[language=tcl]
+initialize_floorplan -utilization 65 \
+  -aspect_ratio 1.0 \
+  -core_space {10.88 10.88 5.52 5.52} \
+  -site unithd
+make_tracks
+\end{lstlisting}
+
+\reportfigure[0.64\textwidth]{initialize_floorplanning.png}
+{Floorplan sau khi tạo die, core và placement rows với utilization mục
+tiêu 65\%.}
+
+\subsection{Bố trí I/O}
+
+Các chân được nhóm theo chức năng:
+
+\begin{itemize}[noitemsep]
+  \item \code{imem_addr[3:0]} ở cạnh Bắc;
+  \item \code{imem_rdata[7:0]} ở cạnh Nam;
+  \item \code{clk} và \code{rst_n} ở cạnh Tây;
+  \item \code{halted} ở cạnh Đông.
+\end{itemize}
+
+Cách bố trí này giữ các bus liên quan ở cùng một cạnh và giúp routing dễ
+quan sát. Tapcell và endcap được chèn để nối well/substrate đúng cách và
+bảo vệ biên của các hàng standard cell.
+
+\begin{lstlisting}[language=tcl]
+place_pins -hor_layers met3 -ver_layers met2 \
+  -corner_avoidance 5 -min_distance_in_tracks
+tapcell -distance 13 \
+  -tapcell_master sky130_fd_sc_hd__tapvpwrvgnd_1 \
+  -endcap_master sky130_fd_sc_hd__decap_3
+\end{lstlisting}
+
+\reportpair{place_pin.png}
+{Bố trí các chân I/O}
+{tapcell.png}
+{Tapcell và endcap}
+{Kết quả pin placement và chèn tapcell/endcap.}
+
+\subsection{Mạng nguồn}
+
+Power distribution network sử dụng hai net \code{VPWR} và \code{VGND}.
+Các rail trên met1 cấp nguồn trực tiếp cho hàng standard cell; stripe trên
+met4 và met5 phân phối nguồn trong core. Sau khi tạo PDN, connectivity của
+hai net nguồn được kiểm tra trước khi placement và routing.
+
+\begin{lstlisting}[language=tcl]
+global_connect
+set_voltage_domain -name CORE -power VPWR -ground VGND
+define_pdn_grid -name stdcell_grid \
+  -voltage_domain CORE -pins {met4 met5}
+pdngen
+check_power_grid -net VPWR
+check_power_grid -net VGND
+\end{lstlisting}
+
+\reportfigure[0.78\textwidth]{pdngen.png}
+{Mạng phân phối nguồn VPWR và VGND sau \code{pdngen}.}
+
+\reportfigure[0.70\textwidth]{check_vdd_gnd.png}
+{Kết quả kiểm tra connectivity của VPWR và VGND.}
+
+\section{Placement và clock-tree synthesis}
+
+\subsection{Placement}
+
+Global placement phân bố cell để giảm wirelength và congestion. Detailed
+placement tiếp tục căn các cell vào site hợp lệ, loại bỏ overlap và tối ưu
+hướng cell.
+
+\begin{lstlisting}[language=tcl]
+set_wire_rc -signal -layer met2
+set_wire_rc -clock -layer met3
+global_placement -density 0.75 \
+  -timing_driven -routability_driven
+detailed_placement
+optimize_mirroring
+check_placement -verbose
+\end{lstlisting}
+
+\reportpair{global_placement.png}
+{Global placement}
+{detail_placement.png}
+{Detailed placement}
+{Vị trí standard cell sau hai bước placement.}
+
+\reportfigure[0.78\textwidth]{optimize_mirroring.png}
+{Kết quả optimize mirroring sau placement.}
+
+\reportfigure[0.65\textwidth]{report_after_optimize.png}
+{Báo cáo placement sau bước tối ưu hướng cell.}
+
+\subsection{Clock-tree synthesis}
+
+Sau placement, clock-tree synthesis chèn clock buffer và xây dựng cây
+clock đến các thanh ghi. Mục tiêu của CTS là:
+
+\begin{itemize}[noitemsep]
+  \item phân phối clock đến tất cả sink;
+  \item giảm clock skew;
+  \item kiểm soát insertion delay và tải;
+  \item tạo điều kiện cho phân tích setup và hold với propagated clock.
+\end{itemize}
+
+Sau CTS, thiết kế được detailed placement lại để bảo đảm các buffer mới
+không gây overlap hoặc vi phạm placement.
+
+\begin{lstlisting}[language=tcl]
+unset_propagated_clock [all_clocks]
+clock_tree_synthesis \
+  -root_buf sky130_fd_sc_hd__clkbuf_16 \
+  -buf_list {sky130_fd_sc_hd__clkbuf_8 \
+             sky130_fd_sc_hd__clkbuf_4 \
+             sky130_fd_sc_hd__clkbuf_2}
+set_propagated_clock [all_clocks]
+detailed_placement
+\end{lstlisting}
+
+\reportpair{cts.png}
+{Clock tree sau CTS}
+{report_after_cts.png}
+{Báo cáo timing sau CTS}
+{Kết quả clock-tree synthesis.}
+
+\reportpair{detail_placement_again_after_cts.png}
+{Detailed placement sau CTS}
+{optimize_mirroring_again_after_cts.png}
+{Optimize mirroring sau CTS}
+{Hợp thức hóa placement sau khi chèn clock buffer.}
+
+\reportfigure[0.68\textwidth]{report_full_clock_path.png}
+{Báo cáo một đường timing đầy đủ qua clock tree sau CTS.}
+
+\section{Routing}
+
+Sau CTS, filler cell được chèn vào các khoảng trống còn lại giữa các
+standard cell để duy trì tính liên tục của well và rail nguồn. Flow
+routing được thực hiện theo thứ tự:
+
+\begin{center}
+CTS $\rightarrow$ filler placement $\rightarrow$
+global routing $\rightarrow$ detailed routing.
+\end{center}
+
+\begin{lstlisting}[language=tcl]
+filler_placement -prefix FILLER_ {
+  sky130_ef_sc_hd__decap_12
+  sky130_fd_sc_hd__decap_8
+  sky130_fd_sc_hd__decap_6
+  sky130_fd_sc_hd__decap_4
+  sky130_fd_sc_hd__decap_3
+  sky130_fd_sc_hd__fill*
+}
+\end{lstlisting}
+
+\reportfigure[0.78\textwidth]{filler_cell_before_routing.png}
+{Filler cell before routing.}
+
+Global routing ước lượng đường đi của các net và đánh giá congestion.
+Detailed routing sau đó tạo wire và via thật trên các lớp met1 đến met5
+theo design rule của Sky130.
+
+\begin{lstlisting}[language=tcl]
+set_routing_layers -signal met1-met5
+set_routing_layers -clock met1-met5
+set_global_routing_layer_adjustment * 0.30
+global_route -congestion_iterations 50 -verbose
+detailed_route -bottom_routing_layer met1 \
+  -top_routing_layer met5 -droute_end_iter 64
+\end{lstlisting}
+
+\reportpair{global_route.png}
+{Thiết kế khi chạy global routing}
+{global_route_result.png}
+{Kết quả global routing}
+{Global routing và đánh giá tài nguyên dây.}
+
+\reportpair{detail_route.png}
+{Layout sau detailed routing}
+{wire_length_report.png}
+{Báo cáo wirelength}
+{Detailed routing và thống kê chiều dài dây.}
+
+\reportfigure[0.78\textwidth]{report_slack_after_detail_route.png}
+{Kết quả kiểm tra timing sau detailed routing.}
+
+\section{Trích xuất ký sinh và post-layout STA}
+
+OpenRCX trích xuất điện trở và điện dung ký sinh của interconnect từ
+layout, sau đó ghi ra file SPEF. OpenSTA đọc netlist, Liberty, clock
+constraint và SPEF để phân tích timing ở nominal corner.
+
+\begin{lstlisting}[language=tcl]
+define_process_corner -ext_model_index 0 CURRENT_CORNER
+extract_parasitics \
+  -ext_model_file rules.openrcx.sky130A.nom.calibre \
+  -lef_res
+write_spef cpu_4bit_manual_final.nom.spef
+\end{lstlisting}
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.50\textwidth}
+                  >{\raggedleft\arraybackslash}p{0.30\textwidth}}
+\toprule
+\textbf{Chỉ tiêu post-layout nominal} & \textbf{Kết quả} \\
+\midrule
+\endhead
+Clock period & 20\,ns \\
+Setup worst slack & $+16.19$\,ns \\
+Hold worst slack & $+0.53$\,ns \\
+Total negative slack & $0.00$\,ns \\
+\bottomrule
+\end{longtable}
+
+Setup và hold slack đều dương, đồng thời TNS bằng 0. Vì vậy thiết kế đạt
+timing ở nominal corner với constraint 20\,ns.
+
+\reportfigure[0.78\textwidth]{extract_parasitic_after_filler_placement.png}
+{Kết quả trích xuất ký sinh của layout sau routing.}
+
+\reportfigure[0.78\textwidth]{report_after_extract_parasitic.png}
+{Báo cáo timing sau khi nạp ký sinh RC được trích xuất từ layout.}
+
+\section{Mô phỏng post-layout}
+
+Sau khi STA nạp SPEF, SDF được tạo để back-annotate cell delay và
+interconnect delay vào gate-level simulation. Testbench post-layout vẫn
+sử dụng cùng chương trình đã kiểm tra ở mức RTL.
+
+Xcelium báo:
+
+\begin{itemize}[noitemsep]
+  \item 722/722 path delay được annotate, đạt 100\%;
+  \item 114/114 timing check được annotate, đạt 100\%;
+  \item mô phỏng kết thúc với ACC bằng 6 và CPU đi vào HALT.
+\end{itemize}
+
+\begin{lstlisting}
+POST-LAYOUT GLS PASSED: ACC = 6
+\end{lstlisting}
+
+Kết quả post-layout phù hợp với RTL simulation. Điểm khác biệt là waveform
+post-layout có propagation delay do standard-cell timing và ký sinh
+interconnect đã được back-annotate qua SDF.
+
+\reportfigure{full_post_layout_waveform.png}
+{Waveform post-layout với các chân nguồn VPWR/VGND và cùng chuỗi
+instruction như mô phỏng RTL.}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.96\textwidth,keepaspectratio]
+    {rtl_waveform_use_for_compare.png}
+  \caption*{(a) Waveform trước layout}
+
+  \vspace{0.5em}
+
+  \includegraphics[width=0.96\textwidth,keepaspectratio]
+    {post_layout_waveform _use_for_compare.png}
+  \caption*{(b) Waveform sau layout}
+  \caption{So sánh waveform trước và sau layout; waveform sau layout thể
+  hiện propagation delay sau SDF back-annotation.}
+\end{figure}
+
+\section{Tạo GDSII}
+
+Sau khi hoàn tất trích xuất ký sinh, STA và mô phỏng post-layout, layout
+cuối được stream-out thành file GDSII:
+
+\begin{lstlisting}[language=tcl]
+write_db cpu_4bit_manual_final.odb
+write_def cpu_4bit_manual_final.def
+global_connect
+write_verilog -include_pwr_gnd cpu_4bit_manual_final.v
+\end{lstlisting}
+
+\begin{lstlisting}
+cpu_4bit_manual_final_fixed.gds
+\end{lstlisting}
+
+\reportfigure{gds_fixed_klayout.png}
+{GDSII cuối trong KLayout.}
+
+\section{Signoff DRC và LVS}
+
+File GDSII cuối được kiểm tra bằng các công cụ signoff:
+
+\begin{itemize}[noitemsep]
+  \item OpenROAD kiểm tra antenna và power-grid connectivity;
+  \item Magic và KLayout kiểm tra DRC trên layout GDSII;
+  \item Netgen so sánh netlist trích xuất từ layout với powered netlist
+        bằng LVS.
+\end{itemize}
+
+LVS sử dụng powered Verilog netlist có đầy đủ các kết nối VPWR và VGND để
+so sánh với netlist được trích xuất từ layout.
+
+\reportfigure[0.78\textwidth]{check_antenna_vdd_gnd_placement_err.png}
+{Kết quả kiểm tra antenna, nguồn và placement trong OpenROAD.}
+
+Kết quả signoff của layout cuối:
+
+\begin{itemize}[noitemsep]
+  \item KLayout DRC: 0 violation;
+  \item antenna: 0 violation;
+  \item power-grid connectivity: VPWR và VGND connected;
+  \item LVS: circuits match uniquely.
+\end{itemize}
+
+Kết quả LVS có 152 device và 156 net ở cả layout lẫn schematic.
+
+\reportfigure[0.78\textwidth]{gds_fixed_klayout_drc.png}
+{Kết quả DRC trên file GDSII cuối: không có DRC violation.}
+
+\reportfigure[0.78\textwidth]{lvs_report.png}
+{Kết quả LVS: layout và powered netlist match uniquely.}
+
+\section{Tổng hợp kết quả}
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.50\textwidth}
+                  >{\raggedleft\arraybackslash}p{0.32\textwidth}}
+\toprule
+\textbf{Chỉ tiêu} & \textbf{Kết quả} \\
+\midrule
+\endhead
+Target core utilization & 65\% \\
+Final instance utilization tham chiếu & 67.7051\% \\
+Die area tham chiếu & 4311.44\umsq \\
+Core area tham chiếu & 2409.81\umsq \\
+Final routing DRC & 0 \\
+Antenna violations & 0 \\
+Magic/KLayout DRC & 0 \\
+LVS & Match uniquely \\
+Post-layout nominal setup slack & $+16.19$\,ns \\
+Post-layout nominal hold slack & $+0.53$\,ns \\
+SDF path-delay annotation & 722/722 \\
+SDF timing-check annotation & 114/114 \\
+RTL simulation & Pass, ACC = 6 \\
+Post-layout simulation & Pass, ACC = 6 \\
+\bottomrule
+\end{longtable}
+
+Diện tích và final utilization trong bảng là số liệu tham chiếu của
+implementation 65\%. Timing post-layout, DRC, LVS và GLS là kết quả của
+layout cuối.
+
+\section{Kết luận}
+
+CPU 4-bit đã hoàn thành toàn bộ quy trình từ RTL đến GDSII. Thiết kế RTL
+được mô phỏng đúng, tổng hợp thành công sang standard cell Sky130, sau đó
+trải qua floorplan, placement, CTS, routing, trích xuất ký sinh, STA và
+mô phỏng post-layout. GDSII sau khi stream-out không có lỗi DRC hoặc
+antenna, LVS khớp duy nhất với powered netlist và thiết kế đạt timing với
+clock 20\,ns.
+
+Mô phỏng post-layout có SDF tiếp tục cho kết quả ACC bằng 6 giống mô phỏng
+RTL. Điều này xác nhận tính nhất quán chức năng từ mô tả ban đầu đến
+netlist sau layout. File GDSII đã vượt qua các bước kiểm tra signoff và
+có thể được sử dụng cho bước chuẩn bị chế tạo tiếp theo.
+
+\end{document}
