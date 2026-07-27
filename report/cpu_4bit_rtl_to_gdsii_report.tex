@@ -535,7 +535,7 @@ detailed_route -bottom_routing_layer met1 \
 {Global routing và đánh giá tài nguyên dây.}
 
 \reportfigure[0.62\textwidth]{16.png}
-{Bản đồ congestion sau global routing.}
+{Congestion map sau global routing.}
 
 \reportpair{17a.png}
 {Layout sau detailed routing}
@@ -609,18 +609,28 @@ chương trình đã kiểm tra ở mức RTL.
 Xcelium báo:
 
 \begin{itemize}[noitemsep]
-  \item 722/722 path delay được annotate, đạt 100\%;
+  \item 725/725 path delay được annotate, đạt 100\%;
   \item 114/114 timing check được annotate, đạt 100\%;
   \item mô phỏng kết thúc với ACC bằng 6 và CPU đi vào HALT.
 \end{itemize}
 
+\begin{center}
+  \includegraphics[width=0.88\textwidth,keepaspectratio]{annotated.png}
+
+  \small\textit{Kết quả SDF annotation: toàn bộ path delay và timing check
+  được annotate thành công.}
+\end{center}
+
 \begin{lstlisting}
-POST-LAYOUT GLS PASSED: ACC = 6
+POST-LAYOUT SIMULATION PASSED: ACC = 6
 \end{lstlisting}
 
 \begin{center}
   \includegraphics[width=0.62\textwidth,keepaspectratio]
-    {post_layout_tb_result.png}
+    {tb_result.png}
+
+  \small\textit{Kết quả testbench post-layout: mô phỏng hoàn tất với ACC
+  bằng 6.}
 \end{center}
 
 Kết quả post-layout phù hợp với RTL simulation. Điểm khác biệt là waveform

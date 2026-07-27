@@ -18,6 +18,6 @@
 \contentsline {section}{\numberline {9}Trích xuất ký sinh và post-layout STA}{16}{section.9}%
 \contentsline {section}{\numberline {10}Mô phỏng post-layout}{18}{section.10}%
 \contentsline {section}{\numberline {11}Tạo GDSII}{19}{section.11}%
-\contentsline {section}{\numberline {12}Kết quả DRC và LVS}{19}{section.12}%
-\contentsline {section}{\numberline {13}Tổng hợp kết quả}{20}{section.13}%
-\contentsline {section}{\numberline {14}Kết luận}{21}{section.14}%
+\contentsline {section}{\numberline {12}Kết quả DRC và LVS}{20}{section.12}%
+\contentsline {section}{\numberline {13}Tổng hợp kết quả}{21}{section.13}%
+\contentsline {section}{\numberline {14}Kết luận}{22}{section.14}%
