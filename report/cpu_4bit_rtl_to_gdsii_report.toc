@@ -1,0 +1,23 @@
+\babel@toc {vietnamese}{}\relax 
+\contentsline {section}{\numberline {1}Giới thiệu}{3}{section.1}%
+\contentsline {section}{\numberline {2}Công nghệ và công cụ}{3}{section.2}%
+\contentsline {section}{\numberline {3}Thiết kế RTL}{3}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Kiến trúc CPU}{3}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Tập lệnh}{4}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}ALU 4-bit}{4}{subsection.3.3}%
+\contentsline {section}{\numberline {4}Mô phỏng và kiểm chứng RTL}{4}{section.4}%
+\contentsline {section}{\numberline {5}Tổng hợp logic}{5}{section.5}%
+\contentsline {section}{\numberline {6}Floorplan và power planning}{7}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Cấu hình chính}{7}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Bố trí I/O}{9}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Power Planning}{9}{subsection.6.3}%
+\contentsline {section}{\numberline {7}Placement và clock-tree synthesis}{10}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Placement}{10}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Clock-tree synthesis}{12}{subsection.7.2}%
+\contentsline {section}{\numberline {8}Routing}{13}{section.8}%
+\contentsline {section}{\numberline {9}Trích xuất ký sinh và post-layout STA}{16}{section.9}%
+\contentsline {section}{\numberline {10}Mô phỏng post-layout}{18}{section.10}%
+\contentsline {section}{\numberline {11}Tạo GDSII}{18}{section.11}%
+\contentsline {section}{\numberline {12}Kết quả DRC và LVS}{19}{section.12}%
+\contentsline {section}{\numberline {13}Tổng hợp kết quả}{20}{section.13}%
+\contentsline {section}{\numberline {14}Kết luận}{21}{section.14}%
