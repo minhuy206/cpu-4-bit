@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.6.25)  27 JUL 2026 17:33
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.6.25)  27 JUL 2026 17:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1189,28 +1189,25 @@ LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 1
 (/usr/share/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [3{/usr/share/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}]
-<../Pictures/rtl_simulation_result.png, id=138, 480.79625pt x 327.2225pt>
-File: ../Pictures/rtl_simulation_result.png Graphic file (type png)
-<use ../Pictures/rtl_simulation_result.png>
-Package pdftex.def Info: ../Pictures/rtl_simulation_result.png  used on input l
-ine 248.
+<../Pictures/1.png, id=138, 480.79625pt x 327.2225pt>
+File: ../Pictures/1.png Graphic file (type png)
+<use ../Pictures/1.png>
+Package pdftex.def Info: ../Pictures/1.png  used on input line 248.
 (pdftex.def)             Requested size: 309.8581pt x 210.88463pt.
  [4{/usr/share/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}]
-<../Pictures/full_rtl_waveform.png, id=148, 2114.90125pt x 314.17375pt>
-File: ../Pictures/full_rtl_waveform.png Graphic file (type png)
-<use ../Pictures/full_rtl_waveform.png>
-Package pdftex.def Info: ../Pictures/full_rtl_waveform.png  used on input line 
-256.
+<../Pictures/2.png, id=148, 2114.90125pt x 314.17375pt>
+File: ../Pictures/2.png Graphic file (type png)
+<use ../Pictures/2.png>
+Package pdftex.def Info: ../Pictures/2.png  used on input line 256.
 (pdftex.def)             Requested size: 413.13019pt x 61.37149pt.
-<../Pictures/synthesis_output.png, id=149, 1003.75pt x 1173.38374pt>
-File: ../Pictures/synthesis_output.png Graphic file (type png)
-<use ../Pictures/synthesis_output.png>
-Package pdftex.def Info: ../Pictures/synthesis_output.png  used on input line 2
-80.
+<../Pictures/3.png, id=149, 1003.75pt x 1173.38374pt>
+File: ../Pictures/3.png Graphic file (type png)
+<use ../Pictures/3.png>
+Package pdftex.def Info: ../Pictures/3.png  used on input line 280.
 (pdftex.def)             Requested size: 338.0235pt x 395.14946pt.
  [5{/usr/share/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf-di
-st/fonts/enc/dvips/lm/lm-rm.enc} <../Pictures/rtl_simulation_result.png (PNG co
-py)> <../Pictures/full_rtl_waveform.png (PNG copy)>]
+st/fonts/enc/dvips/lm/lm-rm.enc} <../Pictures/1.png (PNG copy)> <../Pictures/2.
+png (PNG copy)>]
 Overfull \hbox (3.64754pt too wide) in paragraph at lines 282--288
 []\T5/lmr/m/n/12 Netlist sau têng hñp l  ^^_¦u v o cõa OpenROAD. Tr÷îc khi link
  design, flow ^^_åc technology
@@ -1228,206 +1225,172 @@ File: lstlang1.sty 2025/11/14 1.11b listings language file
 (/usr/share/texmf-dist/tex/latex/listings/lstlang2.sty
 File: lstlang2.sty 2025/11/14 1.11b listings language file
 )
-<../Pictures/sta_after_pin_placement.png, id=160, 438.63875pt x 179.67125pt>
-File: ../Pictures/sta_after_pin_placement.png Graphic file (type png)
-<use ../Pictures/sta_after_pin_placement.png>
-Package pdftex.def Info: ../Pictures/sta_after_pin_placement.png  used on input
- line 311.
+<../Pictures/4.png, id=160, 438.63875pt x 179.67125pt>
+File: ../Pictures/4.png Graphic file (type png)
+<use ../Pictures/4.png>
+Package pdftex.def Info: ../Pictures/4.png  used on input line 311.
 (pdftex.def)             Requested size: 291.07533pt x 119.22765pt.
- [6 <../Pictures/synthesis_output.png (PNG copy)>]
-<../Pictures/make_tracks_after.png, id=175, 2111.89pt x 2114.90125pt>
-File: ../Pictures/make_tracks_after.png Graphic file (type png)
-<use ../Pictures/make_tracks_after.png>
-Package pdftex.def Info: ../Pictures/make_tracks_after.png  used on input line 
-347.
+ [6 <../Pictures/3.png (PNG copy)>]
+<../Pictures/5.png, id=175, 2111.89pt x 2114.90125pt>
+File: ../Pictures/5.png Graphic file (type png)
+<use ../Pictures/5.png>
+Package pdftex.def Info: ../Pictures/5.png  used on input line 347.
 (pdftex.def)             Requested size: 384.95752pt x 385.50642pt.
- [7 <../Pictures/sta_after_pin_placement.png (PNG copy)>]
-<../Pictures/before_floorplanning.png, id=189, 551.05875pt x 509.905pt>
-File: ../Pictures/before_floorplanning.png Graphic file (type png)
-<use ../Pictures/before_floorplanning.png>
-Package pdftex.def Info: ../Pictures/before_floorplanning.png  used on input li
-ne 355.
+ [7 <../Pictures/4.png (PNG copy)>]
+<../Pictures/6a.png, id=189, 551.05875pt x 509.905pt>
+File: ../Pictures/6a.png Graphic file (type png)
+<use ../Pictures/6a.png>
+Package pdftex.def Info: ../Pictures/6a.png  used on input line 355.
 (pdftex.def)             Requested size: 225.34695pt x 208.51776pt.
 
 Underfull \hbox (badness 3590) in paragraph at lines 355--355
 []|\T5/lmr/m/n/12 (a) B¡o c¡o tr÷îc floorplan: ch÷a câ
  []
 
-<../Pictures/after_floorplanning.png, id=190, 547.04375pt x 363.3575pt>
-File: ../Pictures/after_floorplanning.png Graphic file (type png)
-<use ../Pictures/after_floorplanning.png>
-Package pdftex.def Info: ../Pictures/after_floorplanning.png  used on input lin
-e 355.
+<../Pictures/6b.png, id=190, 547.04375pt x 363.3575pt>
+File: ../Pictures/6b.png Graphic file (type png)
+<use ../Pictures/6b.png>
+Package pdftex.def Info: ../Pictures/6b.png  used on input line 355.
 (pdftex.def)             Requested size: 225.34113pt x 149.67612pt.
-[8 <../Pictures/make_tracks_after.png (PNG copy)> <../Pictures/before_floorplan
-ning.png (PNG copy)> <../Pictures/after_floorplanning.png (PNG copy)>]
-<../Pictures/pin_placement_result.png, id=197, 2115.905pt x 2113.8975pt>
-File: ../Pictures/pin_placement_result.png Graphic file (type png)
-<use ../Pictures/pin_placement_result.png>
-Package pdftex.def Info: ../Pictures/pin_placement_result.png  used on input li
-ne 384.
+[8 <../Pictures/5.png (PNG copy)> <../Pictures/6a.png (PNG copy)> <../Pictures/
+6b.png (PNG copy)>]
+<../Pictures/7a.png, id=197, 2115.905pt x 2113.8975pt>
+File: ../Pictures/7a.png Graphic file (type png)
+<use ../Pictures/7a.png>
+Package pdftex.def Info: ../Pictures/7a.png  used on input line 384.
 (pdftex.def)             Requested size: 225.32448pt x 225.11069pt.
-<../Pictures/place_pin_result.png, id=198, 954.56625pt x 290.08376pt>
-File: ../Pictures/place_pin_result.png Graphic file (type png)
-<use ../Pictures/place_pin_result.png>
-Package pdftex.def Info: ../Pictures/place_pin_result.png  used on input line 3
-84.
+<../Pictures/7b.png, id=198, 954.56625pt x 290.08376pt>
+File: ../Pictures/7b.png Graphic file (type png)
+<use ../Pictures/7b.png>
+Package pdftex.def Info: ../Pictures/7b.png  used on input line 384.
 (pdftex.def)             Requested size: 225.34268pt x 68.47952pt.
-<../Pictures/pngen.png, id=199, 2118.91624pt x 2113.8975pt>
-File: ../Pictures/pngen.png Graphic file (type png)
-<use ../Pictures/pngen.png>
-Package pdftex.def Info: ../Pictures/pngen.png  used on input line 405.
+<../Pictures/8.png, id=199, 2118.91624pt x 2113.8975pt>
+File: ../Pictures/8.png Graphic file (type png)
+<use ../Pictures/8.png>
+Package pdftex.def Info: ../Pictures/8.png  used on input line 405.
 (pdftex.def)             Requested size: 384.94499pt x 384.03323pt.
- [9 <../Pictures/pin_placement_result.png (PNG copy)> <../Pictures/place_pin_re
-sult.png (PNG copy)>]
-<../Pictures/global_Placement.png, id=219, 2118.91624pt x 2112.89375pt>
-File: ../Pictures/global_Placement.png Graphic file (type png)
-<use ../Pictures/global_Placement.png>
-Package pdftex.def Info: ../Pictures/global_Placement.png  used on input line 4
-29.
+ [9 <../Pictures/7a.png (PNG copy)> <../Pictures/7b.png (PNG copy)>]
+<../Pictures/9a.png, id=219, 2118.91624pt x 2112.89375pt>
+File: ../Pictures/9a.png Graphic file (type png)
+<use ../Pictures/9a.png>
+Package pdftex.def Info: ../Pictures/9a.png  used on input line 429.
 (pdftex.def)             Requested size: 225.32182pt x 224.6814pt.
-<../Pictures/new_mirroring.png, id=220, 2118.91624pt x 2115.905pt>
-File: ../Pictures/new_mirroring.png Graphic file (type png)
-<use ../Pictures/new_mirroring.png>
-Package pdftex.def Info: ../Pictures/new_mirroring.png  used on input line 429.
-
+<../Pictures/9b.png, id=220, 2118.91624pt x 2115.905pt>
+File: ../Pictures/9b.png Graphic file (type png)
+<use ../Pictures/9b.png>
+Package pdftex.def Info: ../Pictures/9b.png  used on input line 429.
 (pdftex.def)             Requested size: 225.32182pt x 225.00162pt.
- [10 <../Pictures/pngen.png (PNG copy)>]
-<../Pictures/violate_after_detail_placement.png, id=234, 717.68124pt x 196.735p
-t>
-File: ../Pictures/violate_after_detail_placement.png Graphic file (type png)
-<use ../Pictures/violate_after_detail_placement.png>
-Package pdftex.def Info: ../Pictures/violate_after_detail_placement.png  used o
-n input line 446.
+ [10 <../Pictures/8.png (PNG copy)>]
+<../Pictures/10a.png, id=234, 717.68124pt x 196.735pt>
+File: ../Pictures/10a.png Graphic file (type png)
+<use ../Pictures/10a.png>
+Package pdftex.def Info: ../Pictures/10a.png  used on input line 446.
 (pdftex.def)             Requested size: 225.33707pt x 61.7707pt.
-<../Pictures/repair_result.png, id=235, 770.88pt x 601.24625pt>
-File: ../Pictures/repair_result.png Graphic file (type png)
-<use ../Pictures/repair_result.png>
-Package pdftex.def Info: ../Pictures/repair_result.png  used on input line 446.
-
+<../Pictures/10b.png, id=235, 770.88pt x 601.24625pt>
+File: ../Pictures/10b.png Graphic file (type png)
+<use ../Pictures/10b.png>
+Package pdftex.def Info: ../Pictures/10b.png  used on input line 446.
 (pdftex.def)             Requested size: 225.3374pt x 175.75142pt.
-<../Pictures/optimize_mirroring_after_repair.png, id=236, 2116.90875pt x 2114.9
-0125pt>
-File: ../Pictures/optimize_mirroring_after_repair.png Graphic file (type png)
-<use ../Pictures/optimize_mirroring_after_repair.png>
-Package pdftex.def Info: ../Pictures/optimize_mirroring_after_repair.png  used 
-on input line 452.
+<../Pictures/11a.png, id=236, 2116.90875pt x 2114.90125pt>
+File: ../Pictures/11a.png Graphic file (type png)
+<use ../Pictures/11a.png>
+Package pdftex.def Info: ../Pictures/11a.png  used on input line 452.
 (pdftex.def)             Requested size: 225.33446pt x 225.12077pt.
-<../Pictures/sta_after_repari.png, id=237, 487.8225pt x 200.75pt>
-File: ../Pictures/sta_after_repari.png Graphic file (type png)
-<use ../Pictures/sta_after_repari.png>
-Package pdftex.def Info: ../Pictures/sta_after_repari.png  used on input line 4
-52.
+<../Pictures/11b.png, id=237, 487.8225pt x 200.75pt>
+File: ../Pictures/11b.png Graphic file (type png)
+<use ../Pictures/11b.png>
+Package pdftex.def Info: ../Pictures/11b.png  used on input line 452.
 (pdftex.def)             Requested size: 225.3464pt x 92.73514pt.
- [11 <../Pictures/global_Placement.png (PNG copy)> <../Pictures/new_mirroring.p
-ng (PNG copy)> <../Pictures/violate_after_detail_placement.png (PNG copy)> <../
-Pictures/repair_result.png (PNG copy)>]
-<../Pictures/after_cts.png, id=248, 2119.92pt x 2113.8975pt>
-File: ../Pictures/after_cts.png Graphic file (type png)
-<use ../Pictures/after_cts.png>
-Package pdftex.def Info: ../Pictures/after_cts.png  used on input line 484.
+ [11 <../Pictures/9a.png (PNG copy)> <../Pictures/9b.png (PNG copy)> <../Pictur
+es/10a.png (PNG copy)> <../Pictures/10b.png (PNG copy)>]
+<../Pictures/12a.png, id=248, 2119.92pt x 2113.8975pt>
+File: ../Pictures/12a.png Graphic file (type png)
+<use ../Pictures/12a.png>
+Package pdftex.def Info: ../Pictures/12a.png  used on input line 484.
 (pdftex.def)             Requested size: 225.33151pt x 224.69138pt.
-<../Pictures/cts_result.png, id=249, 2066.72125pt x 999.735pt>
-File: ../Pictures/cts_result.png Graphic file (type png)
-<use ../Pictures/cts_result.png>
-Package pdftex.def Info: ../Pictures/cts_result.png  used on input line 484.
+<../Pictures/12b.png, id=249, 2066.72125pt x 999.735pt>
+File: ../Pictures/12b.png Graphic file (type png)
+<use ../Pictures/12b.png>
+Package pdftex.def Info: ../Pictures/12b.png  used on input line 484.
 (pdftex.def)             Requested size: 225.32176pt x 108.99489pt.
- [12 <../Pictures/optimize_mirroring_after_repair.png (PNG copy)> <../Pictures/
-sta_after_repari.png (PNG copy)>]
-<../Pictures/detail_placement_after_cts.png, id=264, 2120.92375pt x 2114.90125p
-t>
-File: ../Pictures/detail_placement_after_cts.png Graphic file (type png)
-<use ../Pictures/detail_placement_after_cts.png>
-Package pdftex.def Info: ../Pictures/detail_placement_after_cts.png  used on in
-put line 490.
+ [12 <../Pictures/11a.png (PNG copy)> <../Pictures/11b.png (PNG copy)>]
+<../Pictures/13a.png, id=264, 2120.92375pt x 2114.90125pt>
+File: ../Pictures/13a.png Graphic file (type png)
+<use ../Pictures/13a.png>
+Package pdftex.def Info: ../Pictures/13a.png  used on input line 490.
 (pdftex.def)             Requested size: 225.34113pt x 224.70125pt.
-<../Pictures/post_cts_report.png, id=265, 887.315pt x 723.70375pt>
-File: ../Pictures/post_cts_report.png Graphic file (type png)
-<use ../Pictures/post_cts_report.png>
-Package pdftex.def Info: ../Pictures/post_cts_report.png  used on input line 49
-0.
+<../Pictures/13b.png, id=265, 887.315pt x 723.70375pt>
+File: ../Pictures/13b.png Graphic file (type png)
+<use ../Pictures/13b.png>
+Package pdftex.def Info: ../Pictures/13b.png  used on input line 490.
 (pdftex.def)             Requested size: 225.33488pt x 183.78558pt.
- [13 <../Pictures/after_cts.png (PNG copy)> <../Pictures/cts_result.png (PNG co
-py)> <../Pictures/detail_placement_after_cts.png (PNG copy)> <../Pictures/post_
-cts_report.png (PNG copy)>]
-<../Pictures/filler_placement.png, id=273, 2118.91624pt x 2117.9125pt>
-File: ../Pictures/filler_placement.png Graphic file (type png)
-<use ../Pictures/filler_placement.png>
-Package pdftex.def Info: ../Pictures/filler_placement.png  used on input line 5
-16.
+ [13 <../Pictures/12a.png (PNG copy)> <../Pictures/12b.png (PNG copy)> <../Pict
+ures/13a.png (PNG copy)> <../Pictures/13b.png (PNG copy)>]
+<../Pictures/14.png, id=273, 2118.91624pt x 2117.9125pt>
+File: ../Pictures/14.png Graphic file (type png)
+<use ../Pictures/14.png>
+Package pdftex.def Info: ../Pictures/14.png  used on input line 516.
 (pdftex.def)             Requested size: 413.10619pt x 412.91049pt.
-<../Pictures/global_route.png, id=274, 2119.92pt x 2116.90875pt>
-File: ../Pictures/global_route.png Graphic file (type png)
-<use ../Pictures/global_route.png>
-Package pdftex.def Info: ../Pictures/global_route.png  used on input line 535.
+<../Pictures/15a.png, id=274, 2119.92pt x 2116.90875pt>
+File: ../Pictures/15a.png Graphic file (type png)
+<use ../Pictures/15a.png>
+Package pdftex.def Info: ../Pictures/15a.png  used on input line 535.
 (pdftex.def)             Requested size: 225.33151pt x 225.01144pt.
-<../Pictures/global_route_result.png, id=275, 1218.5525pt x 1181.41376pt>
-File: ../Pictures/global_route_result.png Graphic file (type png)
-<use ../Pictures/global_route_result.png>
-Package pdftex.def Info: ../Pictures/global_route_result.png  used on input lin
-e 535.
+<../Pictures/15b.png, id=275, 1218.5525pt x 1181.41376pt>
+File: ../Pictures/15b.png Graphic file (type png)
+<use ../Pictures/15b.png>
+Package pdftex.def Info: ../Pictures/15b.png  used on input line 535.
 (pdftex.def)             Requested size: 225.33571pt x 218.46799pt.
 
-[14 <../Pictures/filler_placement.png (PNG copy)>]
-<../Pictures/routing_congestion.png, id=292, 2119.92pt x 2115.905pt>
-File: ../Pictures/routing_congestion.png Graphic file (type png)
-<use ../Pictures/routing_congestion.png>
-Package pdftex.def Info: ../Pictures/routing_congestion.png  used on input line
- 538.
+[14 <../Pictures/14.png (PNG copy)>]
+<../Pictures/16.png, id=292, 2119.92pt x 2115.905pt>
+File: ../Pictures/16.png Graphic file (type png)
+<use ../Pictures/16.png>
+Package pdftex.def Info: ../Pictures/16.png  used on input line 538.
 (pdftex.def)             Requested size: 291.0613pt x 290.51004pt.
-<../Pictures/detail_route.png, id=293, 2117.9125pt x 2112.89375pt>
-File: ../Pictures/detail_route.png Graphic file (type png)
-<use ../Pictures/detail_route.png>
-Package pdftex.def Info: ../Pictures/detail_route.png  used on input line 544.
+<../Pictures/17a.png, id=293, 2117.9125pt x 2112.89375pt>
+File: ../Pictures/17a.png Graphic file (type png)
+<use ../Pictures/17a.png>
+Package pdftex.def Info: ../Pictures/17a.png  used on input line 544.
 (pdftex.def)             Requested size: 225.31204pt x 224.77812pt.
-<../Pictures/detail_routing_result.png, id=294, 451.6875pt x 461.725pt>
-File: ../Pictures/detail_routing_result.png Graphic file (type png)
-<use ../Pictures/detail_routing_result.png>
-Package pdftex.def Info: ../Pictures/detail_routing_result.png  used on input l
-ine 544.
+<../Pictures/17b.png, id=294, 451.6875pt x 461.725pt>
+File: ../Pictures/17b.png Graphic file (type png)
+<use ../Pictures/17b.png>
+Package pdftex.def Info: ../Pictures/17b.png  used on input line 544.
 (pdftex.def)             Requested size: 225.34695pt x 230.35466pt.
- [15 <../Pictures/global_route.png (PNG copy)> <../Pictures/global_route_result
-.png (PNG copy)> <../Pictures/routing_congestion.png (PNG copy)>]
-<../Pictures/post_detail_routing_checks.png, id=301, 1054.94125pt x 276.03125pt
->
-File: ../Pictures/post_detail_routing_checks.png Graphic file (type png)
-<use ../Pictures/post_detail_routing_checks.png>
-Package pdftex.def Info: ../Pictures/post_detail_routing_checks.png  used on in
-put line 552.
+ [15 <../Pictures/15a.png (PNG copy)> <../Pictures/15b.png (PNG copy)> <../Pict
+ures/16.png (PNG copy)>]
+<../Pictures/18.png, id=301, 1054.94125pt x 276.03125pt>
+File: ../Pictures/18.png Graphic file (type png)
+<use ../Pictures/18.png>
+Package pdftex.def Info: ../Pictures/18.png  used on input line 552.
 (pdftex.def)             Requested size: 431.90092pt x 113.00928pt.
-<../Pictures/before_sign_off_corearea.png, id=302, 2087.8pt x 272.01625pt>
-File: ../Pictures/before_sign_off_corearea.png Graphic file (type png)
-<use ../Pictures/before_sign_off_corearea.png>
-Package pdftex.def Info: ../Pictures/before_sign_off_corearea.png  used on inpu
-t line 557.
+<../Pictures/19.png, id=302, 2087.8pt x 272.01625pt>
+File: ../Pictures/19.png Graphic file (type png)
+<use ../Pictures/19.png>
+Package pdftex.def Info: ../Pictures/19.png  used on input line 557.
 (pdftex.def)             Requested size: 431.88835pt x 56.27007pt.
- [16 <../Pictures/detail_route.png (PNG copy)> <../Pictures/detail_routing_resu
-lt.png (PNG copy)> <../Pictures/post_detail_routing_checks.png (PNG copy)> <../
-Pictures/before_sign_off_corearea.png (PNG copy)>]
-<../Pictures/2026-07-27-155338_hyprshot.png, id=310, 1962.33125pt x 527.9725pt>
-
-File: ../Pictures/2026-07-27-155338_hyprshot.png Graphic file (type png)
-<use ../Pictures/2026-07-27-155338_hyprshot.png>
-Package pdftex.def Info: ../Pictures/2026-07-27-155338_hyprshot.png  used on in
-put line 593.
+ [16 <../Pictures/17a.png (PNG copy)> <../Pictures/17b.png (PNG copy)> <../Pict
+ures/18.png (PNG copy)> <../Pictures/19.png (PNG copy)>]
+<../Pictures/20a.png, id=310, 1962.33125pt x 527.9725pt>
+File: ../Pictures/20a.png Graphic file (type png)
+<use ../Pictures/20a.png>
+Package pdftex.def Info: ../Pictures/20a.png  used on input line 593.
 (pdftex.def)             Requested size: 225.319pt x 60.62291pt.
-<../Pictures/2026-07-27-155644_hyprshot.png, id=311, 359.3425pt x 178.6675pt>
-File: ../Pictures/2026-07-27-155644_hyprshot.png Graphic file (type png)
-<use ../Pictures/2026-07-27-155644_hyprshot.png>
-Package pdftex.def Info: ../Pictures/2026-07-27-155644_hyprshot.png  used on in
-put line 593.
+<../Pictures/20b.png, id=311, 359.3425pt x 178.6675pt>
+File: ../Pictures/20b.png Graphic file (type png)
+<use ../Pictures/20b.png>
+Package pdftex.def Info: ../Pictures/20b.png  used on input line 593.
 (pdftex.def)             Requested size: 225.35065pt x 112.04585pt.
-<../Pictures/2026-07-27-155615_hyprshot.png, id=312, 1003.75pt x 1457.445pt>
-File: ../Pictures/2026-07-27-155615_hyprshot.png Graphic file (type png)
-<use ../Pictures/2026-07-27-155615_hyprshot.png>
-Package pdftex.def Info: ../Pictures/2026-07-27-155615_hyprshot.png  used on in
-put line 599.
+<../Pictures/21a.png, id=312, 1003.75pt x 1457.445pt>
+File: ../Pictures/21a.png Graphic file (type png)
+<use ../Pictures/21a.png>
+Package pdftex.def Info: ../Pictures/21a.png  used on input line 599.
 (pdftex.def)             Requested size: 173.51465pt x 251.94327pt.
-<../Pictures/2026-07-27-155513_hyprshot.png, id=313, 1003.75pt x 1505.625pt>
-File: ../Pictures/2026-07-27-155513_hyprshot.png Graphic file (type png)
-<use ../Pictures/2026-07-27-155513_hyprshot.png>
-Package pdftex.def Info: ../Pictures/2026-07-27-155513_hyprshot.png  used on in
-put line 599.
+<../Pictures/21b.png, id=313, 1003.75pt x 1505.625pt>
+File: ../Pictures/21b.png Graphic file (type png)
+<use ../Pictures/21b.png>
+Package pdftex.def Info: ../Pictures/21b.png  used on input line 599.
 (pdftex.def)             Requested size: 167.97026pt x 251.9554pt.
 
 Overfull \hbox (6.52493pt too wide) in paragraph at lines 603--608
@@ -1435,52 +1398,44 @@ Overfull \hbox (6.52493pt too wide) in paragraph at lines 603--608
 ate cell delay v  interconnect
  []
 
-[17 <../Pictures/2026-07-27-155338_hyprshot.png (PNG copy)> <../Pictures/2026-0
-7-27-155644_hyprshot.png (PNG copy)> <../Pictures/2026-07-27-155615_hyprshot.pn
-g (PNG copy)> <../Pictures/2026-07-27-155513_hyprshot.png (PNG copy)>]
-<../Pictures/full_post_layout_waveform.png, id=327, 1730.465pt x 354.32375pt>
-File: ../Pictures/full_post_layout_waveform.png Graphic file (type png)
-<use ../Pictures/full_post_layout_waveform.png>
-Package pdftex.def Info: ../Pictures/full_post_layout_waveform.png  used on inp
-ut line 627.
+[17 <../Pictures/20a.png (PNG copy)> <../Pictures/20b.png (PNG copy)> <../Pictu
+res/21a.png (PNG copy)> <../Pictures/21b.png (PNG copy)>]
+<../Pictures/22.png, id=327, 1730.465pt x 354.32375pt>
+File: ../Pictures/22.png Graphic file (type png)
+<use ../Pictures/22.png>
+Package pdftex.def Info: ../Pictures/22.png  used on input line 627.
 (pdftex.def)             Requested size: 413.1285pt x 84.59068pt.
-<../Pictures/rtl_waveform_use_for_compare.png, id=328, 2115.905pt x 325.215pt>
-File: ../Pictures/rtl_waveform_use_for_compare.png Graphic file (type png)
-<use ../Pictures/rtl_waveform_use_for_compare.png>
-Package pdftex.def Info: ../Pictures/rtl_waveform_use_for_compare.png  used on 
-input line 632.
+<../Pictures/23a.png, id=328, 2115.905pt x 325.215pt>
+File: ../Pictures/23a.png Graphic file (type png)
+<use ../Pictures/23a.png>
+Package pdftex.def Info: ../Pictures/23a.png  used on input line 632.
 (pdftex.def)             Requested size: 450.69481pt x 69.26979pt.
-<../Pictures/post_layout_waveform _use_for_compare.png, id=329, 1730.465pt x 35
-4.32375pt>
-File: ../Pictures/post_layout_waveform _use_for_compare.png Graphic file (type 
-png)
-<use ../Pictures/post_layout_waveform _use_for_compare.png>
-Package pdftex.def Info: ../Pictures/post_layout_waveform _use_for_compare.png 
- used on input line 638.
+<../Pictures/23b.png, id=329, 1730.465pt x 354.32375pt>
+File: ../Pictures/23b.png Graphic file (type png)
+<use ../Pictures/23b.png>
+Package pdftex.def Info: ../Pictures/23b.png  used on input line 638.
 (pdftex.def)             Requested size: 450.69481pt x 92.27878pt.
- [18 <../Pictures/full_post_layout_waveform.png (PNG copy)> <../Pictures/rtl_wa
-veform_use_for_compare.png (PNG copy)> <../Pictures/post_layout_waveform _use_f
-or_compare.png (PNG copy)>]
-<../Pictures/gdsii_result.png, id=338, 2120.92375pt x 2114.90125pt>
-File: ../Pictures/gdsii_result.png Graphic file (type png)
-<use ../Pictures/gdsii_result.png>
-Package pdftex.def Info: ../Pictures/gdsii_result.png  used on input line 660.
+ [18 <../Pictures/22.png (PNG copy)> <../Pictures/23a.png (PNG copy)> <../Pictu
+res/23b.png (PNG copy)>]
+<../Pictures/24.png, id=338, 2120.92375pt x 2114.90125pt>
+File: ../Pictures/24.png Graphic file (type png)
+<use ../Pictures/24.png>
+Package pdftex.def Info: ../Pictures/24.png  used on input line 660.
 (pdftex.def)             Requested size: 413.1092pt x 411.93616pt.
-<../Pictures/gds_fixed_klayout_drc.png, id=339, 2119.92pt x 2115.905pt>
-File: ../Pictures/gds_fixed_klayout_drc.png Graphic file (type png)
-<use ../Pictures/gds_fixed_klayout_drc.png>
-Package pdftex.def Info: ../Pictures/gds_fixed_klayout_drc.png  used on input l
-ine 676.
+<../Pictures/25a.png, id=339, 2119.92pt x 2115.905pt>
+File: ../Pictures/25a.png Graphic file (type png)
+<use ../Pictures/25a.png>
+Package pdftex.def Info: ../Pictures/25a.png  used on input line 676.
 (pdftex.def)             Requested size: 225.33151pt x 224.90475pt.
-<../Pictures/lvs_report.png, id=340, 1003.75pt x 1810.765pt>
-File: ../Pictures/lvs_report.png Graphic file (type png)
-<use ../Pictures/lvs_report.png>
-Package pdftex.def Info: ../Pictures/lvs_report.png  used on input line 676.
+<../Pictures/25b.png, id=340, 1003.75pt x 1810.765pt>
+File: ../Pictures/25b.png Graphic file (type png)
+<use ../Pictures/25b.png>
+Package pdftex.def Info: ../Pictures/25b.png  used on input line 676.
 (pdftex.def)             Requested size: 139.65103pt x 251.93047pt.
- [19 <../Pictures/gdsii_result.png (PNG copy)>]
-ignored: Infinite glue shrinkage found in
- box being split [20 <../Pictures/gds_fixed_klayout_drc.png (PNG copy)> <../Pic
-tures/lvs_report.png (PNG copy)>] [21] (./cpu_4bit_rtl_to_gdsii_report.aux)
+ [19 <../Pictures/24.png (PNG copy)>]
+ignored: Infinite glue shrinkage found in box being
+ split [20 <../Pictures/25a.png (PNG copy)> <../Pictures/25b.png (PNG copy)>] [
+21] (./cpu_4bit_rtl_to_gdsii_report.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
@@ -1491,7 +1446,7 @@ anged.
  ) 
 Here is how much of TeX's memory you used:
  26948 strings out of 468995
- 493155 string characters out of 5460435
+ 487323 string characters out of 5460435
  1098787 words of memory out of 5000000
  55176 multiletter control sequences out of 15000+600000
  704473 words of font info for 74 fonts, out of 8000000 for 9000

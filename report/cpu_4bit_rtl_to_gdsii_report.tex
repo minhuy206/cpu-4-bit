@@ -243,14 +243,14 @@ Giá trị ACC thay đổi lần lượt thành 3, 8, 6, 12 và 6. Sau lệnh HL
 TEST PASSED: ACC = 6
 \end{lstlisting}
 
-\reportfigure[0.66\textwidth]{rtl_simulation_result.png}
+\reportfigure[0.66\textwidth]{1.png}
 {Kết quả mô phỏng RTL: ACC thay đổi đúng theo chuỗi lệnh, CPU vào trạng
 thái HALT và testbench báo \code{TEST PASSED: ACC = 6}.}
 
 Kết quả này xác nhận chức năng cơ bản của RTL trước khi chuyển sang
 synthesis và physical design.
 
-\reportfigure{full_rtl_waveform.png}
+\reportfigure{2.png}
 {Mô phỏng RTL đầy đủ đến 250\,ns: địa chỉ tăng từ 0 đến 6, instruction lần lượt là
 \code{13}, \code{25}, \code{32}, \code{80}, \code{90}, \code{F0} và
 \code{00}; tín hiệu \code{halted} lên mức 1 sau lệnh HLT.}
@@ -275,7 +275,7 @@ Mapped cell area & 1591.5264\umsq \\
 \bottomrule
 \end{longtable}
 
-\reportfigure[0.72\textwidth]{synthesis_output.png}
+\reportfigure[0.72\textwidth]{3.png}
 {Kết quả tổng hợp của Yosys sau technology mapping: thiết kế gồm 140
 standard cell với tổng diện tích 1591.5264\umsq.}
 
@@ -306,7 +306,7 @@ Utilization được báo là 100\% trước floorplan chỉ là giá trị tạ
 điểm đó chưa có placement area để làm mẫu số. Giá trị này không phải mật
 độ thực của implementation.
 
-\reportfigure[0.62\textwidth]{sta_after_pin_placement.png}
+\reportfigure[0.62\textwidth]{4.png}
 {Initial STA sau khi nạp netlist và constraint: setup slack
 $+14.71$\,ns, hold slack $+0.27$\,ns và TNS bằng 0.}
 
@@ -342,14 +342,14 @@ initialize_floorplan -utilization 65 \
 make_tracks
 \end{lstlisting}
 
-\reportfigure[0.82\textwidth]{make_tracks_after.png}
+\reportfigure[0.82\textwidth]{5.png}
 {Floorplan sau khi tạo die, core và placement rows, tiếp theo là các
 routing track được tạo bởi \code{make_tracks}.}
 
-\reportpair{before_floorplanning.png}
+\reportpair{6a.png}
 {Báo cáo trước floorplan: chưa có placement area nên utilization tạm là
 100\%}
-{after_floorplanning.png}
+{6b.png}
 {Báo cáo sau floorplan: tạo 18 placement row, utilization 66\% và timing
 vẫn đạt}
 {Đối chiếu báo cáo thiết kế trước và sau khi khởi tạo floorplan.}
@@ -377,9 +377,9 @@ tapcell -distance 13 \
   -endcap_master sky130_fd_sc_hd__decap_3
 \end{lstlisting}
 
-\reportpair{pin_placement_result.png}
+\reportpair{7a.png}
 {Bố trí các chân I/O}
-{place_pin_result.png}
+{7b.png}
 {Kết quả lệnh pin placement}
 {Bố trí và kiểm tra các chân I/O.}
 
@@ -400,7 +400,7 @@ check_power_grid -net VPWR
 check_power_grid -net VGND
 \end{lstlisting}
 
-\reportfigure[0.82\textwidth]{pngen.png}
+\reportfigure[0.82\textwidth]{8.png}
 {Power Distribution Network (PDN) sau \code{pdngen} và trước global
 placement.}
 
@@ -422,9 +422,9 @@ optimize_mirroring
 check_placement -verbose
 \end{lstlisting}
 
-\reportpair{global_Placement.png}
+\reportpair{9a.png}
 {Global placement}
-{new_mirroring.png}
+{9b.png}
 {Detailed placement}
 {Vị trí standard cell sau hai bước placement.}
 
@@ -439,15 +439,15 @@ detailed_placement
 optimize_mirroring
 \end{lstlisting}
 
-\reportpair{violate_after_detail_placement.png}
+\reportpair{10a.png}
 {Hai max-fanout violation}
-{repair_result.png}
+{10b.png}
 {Kết quả \code{repair_design}}
 {Phát hiện fanout vượt giới hạn và chèn ba instance sửa lỗi.}
 
-\reportpair{optimize_mirroring_after_repair.png}
+\reportpair{11a.png}
 {Detailed placement sau repair}
-{sta_after_repari.png}
+{11b.png}
 {STA sau repair}
 {Legalization và timing sau khi sửa design.}
 
@@ -477,15 +477,15 @@ set_propagated_clock [all_clocks]
 detailed_placement
 \end{lstlisting}
 
-\reportpair{after_cts.png}
+\reportpair{12a.png}
 {Clock tree sau CTS}
-{cts_result.png}
+{12b.png}
 {Báo cáo timing sau CTS}
 {Kết quả clock-tree synthesis.}
 
-\reportpair{detail_placement_after_cts.png}
+\reportpair{13a.png}
 {Detailed placement lại sau CTS}
-{post_cts_report.png}
+{13b.png}
 {Báo cáo sau CTS}
 {Detailed placement sau CTS để legalize các clock buffer mới.}
 
@@ -512,7 +512,7 @@ lại giữa standard cell sau detailed placement. Tùy chọn
 Sky130 HD. Sau khi chèn filler, \code{global_connect} cập nhật kết nối
 nguồn trước khi routing.
 
-\reportfigure{filler_placement.png}
+\reportfigure{14.png}
 {Layout sau filler placement, trước global và detailed routing.}
 
 Global routing ước lượng đường đi của các net và đánh giá congestion.
@@ -528,18 +528,18 @@ detailed_route -bottom_routing_layer met1 \
   -top_routing_layer met5 -droute_end_iter 64
 \end{lstlisting}
 
-\reportpair{global_route.png}
+\reportpair{15a.png}
 {Thiết kế khi chạy global routing}
-{global_route_result.png}
+{15b.png}
 {Kết quả global routing}
 {Global routing và đánh giá tài nguyên dây.}
 
-\reportfigure[0.62\textwidth]{routing_congestion.png}
+\reportfigure[0.62\textwidth]{16.png}
 {Bản đồ congestion sau global routing.}
 
-\reportpair{detail_route.png}
+\reportpair{17a.png}
 {Layout sau detailed routing}
-{detail_routing_result.png}
+{17b.png}
 {Báo cáo detailed routing}
 {Detailed routing và kiểm tra kết quả.}
 
@@ -547,11 +547,11 @@ Báo cáo DRC của detailed router trong OpenROAD rỗng; kiểm tra antenna ch
 0 violation. Hai báo cáo power-grid cũng rỗng, xác nhận VPWR và VGND
 được kết nối trong database routed.
 
-\reportfigure[0.92\textwidth]{post_detail_routing_checks.png}
+\reportfigure[0.92\textwidth]{18.png}
 {Kiểm tra sau detailed routing: antenna không có violation, VPWR/VGND
 được kết nối và báo cáo DRC đã được tạo.}
 
-\reportfigure[0.92\textwidth]{before_sign_off_corearea.png}
+\reportfigure[0.92\textwidth]{19.png}
 {Báo cáo diện tích sau detailed routing: die area
 4311.4448\umsq, core area 2409.8112\umsq, design area 1540\umsq và
 utilization 64\%.}
@@ -586,15 +586,15 @@ Total negative slack & $0.00$\,ns \\
 Setup và hold slack đều dương, đồng thời TNS bằng 0. Vì vậy thiết kế đạt
 timing ở nominal corner với constraint 20\,ns.
 
-\reportpair{2026-07-27-155338_hyprshot.png}
+\reportpair{20a.png}
 {OpenRCX và SPEF}
-{2026-07-27-155644_hyprshot.png}
+{20b.png}
 {STA sau khi nạp ký sinh}
 {Trích xuất ký sinh và post-route STA.}
 
-\reportpair{2026-07-27-155615_hyprshot.png}
+\reportpair{21a.png}
 {Các đường setup sau khi nạp SPEF}
-{2026-07-27-155513_hyprshot.png}
+{21b.png}
 {Các đường hold sau khi nạp SPEF}
 {Các đường timing chi tiết sau trích xuất ký sinh.}
 
@@ -622,20 +622,20 @@ Kết quả post-layout phù hợp với RTL simulation. Điểm khác biệt l�
 post-layout có propagation delay do standard-cell timing và ký sinh
 interconnect đã được back-annotate qua SDF.
 
-\reportfigure{full_post_layout_waveform.png}
+\reportfigure{22.png}
 {Waveform post-layout với các chân nguồn VPWR/VGND và cùng chuỗi
 instruction như mô phỏng RTL.}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.96\textwidth,keepaspectratio]
-    {rtl_waveform_use_for_compare.png}
+    {23a.png}
   \caption*{(a) Waveform trước layout}
 
   \vspace{0.5em}
 
   \includegraphics[width=0.96\textwidth,keepaspectratio]
-    {post_layout_waveform _use_for_compare.png}
+    {23b.png}
   \caption*{(b) Waveform sau layout}
   \caption{So sánh waveform trước và sau layout; waveform sau layout thể
   hiện propagation delay sau SDF back-annotation.}
@@ -656,7 +656,7 @@ write_gds cpu_4bit_manual_final.gds
 
 GDSII được mở trong KLayout để kiểm tra layout và thực hiện signoff DRC.
 
-\reportfigure[0.88\textwidth]{gdsii_result.png}
+\reportfigure[0.88\textwidth]{24.png}
 {Layout GDSII cuối được mở trong KLayout.}
 
 \section{Kết quả DRC và LVS}
@@ -669,9 +669,9 @@ Kết quả signoff:
         159 net ở cả hai phía.
 \end{itemize}
 
-\reportpair{gds_fixed_klayout_drc.png}
+\reportpair{25a.png}
 {KLayout DRC: 0 violation}
-{lvs_report.png}
+{25b.png}
 {LVS: circuits match uniquely}
 {Kết quả kiểm tra DRC và LVS.}
 
